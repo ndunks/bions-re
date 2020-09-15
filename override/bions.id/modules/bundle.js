@@ -1,30 +1,30 @@
 (function () {
     var p = null;
     var d = {
-        t: "CONNECT",
-        w: "CONNECTED",
-        C: "MESSAGE",
-        A: "ERROR",
-        z: "DISCONNECT",
-        H: "SEND",
-        I: "SUBSCRIBE",
-        J: "UNSUBSCRIBE",
-        ha: "subscription",
-        rb: "transaction",
-        b: "destination",
-        Ba: "sub-",
-        qb: "message-id",
-        f: "session",
-        B: "login",
-        F: "passcode",
-        fa: "message",
+        txtCONNECT: "CONNECT",
+        txtCONNECTED: "CONNECTED",
+        txtMESSAGE: "MESSAGE",
+        txtERROR: "ERROR",
+        txtDISCONNECT: "DISCONNECT",
+        txtSEND: "SEND",
+        txtSUBSCRIBE: "SUBSCRIBE",
+        txtUNSUBSCRIBE: "UNSUBSCRIBE",
+        txtsubscription: "subscription",
+        txttransaction: "transaction",
+        txtdestination: "destination",
+        txtSubPrefix: "sub-",
+        txtmessage_id: "message-id",
+        txtsession: "session",
+        txtlogin: "login",
+        txtpasscode: "passcode",
+        txtmessage: "message",
         ID: "id",
-        G: "selector",
-        ga: "replyto",
-        a: "body",
-        Aa: "connection lost:",
-        D: "\n",
-        v: 2,
+        txtselector: "selector",
+        txtreplyto: "replyto",
+        txtbody: "body",
+        txtconnection_lost: "connection lost:",
+        txt_new_line: "\n",
+        version: 2,
         /** bL: en ( crypt?) */
         encrypt(b) {
             return d.oa(rsa.en(d.L, d.K, b))
@@ -44,43 +44,43 @@
                 j += "=";
             return j
         },
-        qa(b, e, i) {
+        encryptMesage(cmd, bucket, tail) {
             return {
-                cmd: b,
-                bucket: e,
-                tail: i,
+                cmd: cmd,
+                bucket: bucket,
+                tail: tail,
                 Ra: function () {
                     var i = [];
-                    return d.t == b ? (d.v = 2,
+                    return d.txtCONNECT == cmd ? (d.version = 2,
                         d.u = Math.uuid(16),
                         i.push(0),
-                        i.push(e[d.B]),
-                        i.push(e[d.F]),
-                        i.push(d.v),
+                        i.push(bucket[d.txtlogin]),
+                        i.push(bucket[d.txtpasscode]),
+                        i.push(d.version),
                         i.push(d.u),
                         i.push(0),
-                        i.push(0)) : d.w == b ? (i.push(1),
-                            i.push(e[d.f])) : d.z == b ? i.push(2) : d.A == b ? (i.push(3),
-                                i.push(e[d.fa])) : d.I == b ? (i.push(4),
-                                    i.push(e[d.b]),
-                                    i.push(e[d.ID]),
-                                    e[d.G] && i.push(e[d.G])) : d.J == b ? (i.push(5),
-                                        i.push(e[d.b]),
-                                        i.push(e[d.ID])) : d.H == b ? (i.push(6),
-                                            i.push(e[d.b]),
-                                            i.push(e[d.ga]),
-                                            i.push(e[d.a])) : d.C == b && (i.push(7),
-                                                i.push(e[d.b]),
-                                                i.push(e[d.b]),
-                                                i.push(e[d.a])),
-                        b == d.t ? d.oa(rsa.en(d.L, d.K, JSON.stringify(i))) : d.v == 2 ? d.enb64(d.ra(d.u, JSON.stringify(i))) : d.enb64(JSON.stringify(i))
+                        i.push(0)) : d.txtCONNECTED == cmd ? (i.push(1),
+                            i.push(bucket[d.txtsession])) : d.txtDISCONNECT == cmd ? i.push(2) : d.txtERROR == cmd ? (i.push(3),
+                                i.push(bucket[d.txtmessage])) : d.txtSUBSCRIBE == cmd ? (i.push(4),
+                                    i.push(bucket[d.txtdestination]),
+                                    i.push(bucket[d.ID]),
+                                    bucket[d.txtselector] && i.push(bucket[d.txtselector])) : d.txtUNSUBSCRIBE == cmd ? (i.push(5),
+                                        i.push(bucket[d.txtdestination]),
+                                        i.push(bucket[d.ID])) : d.txtSEND == cmd ? (i.push(6),
+                                            i.push(bucket[d.txtdestination]),
+                                            i.push(bucket[d.txtreplyto]),
+                                            i.push(bucket[d.txtbody])) : d.txtMESSAGE == cmd && (i.push(7),
+                                                i.push(bucket[d.txtdestination]),
+                                                i.push(bucket[d.txtdestination]),
+                                                i.push(bucket[d.txtbody])),
+                        cmd == d.txtCONNECT ? d.oa(rsa.en(d.L, d.K, JSON.stringify(i))) : d.version == 2 ? d.enb64(d.ra(d.u, JSON.stringify(i))) : d.enb64(JSON.stringify(i))
                 },
                 toString: function () {
-                    var i = b + d.D;
-                    if (e)
-                        for (h in e)
-                            e.hasOwnProperty(h) && (i = i + h + ": " + e[h] + d.D);
-                    return i += d.D,
+                    var i = cmd + d.txt_new_line;
+                    if (bucket)
+                        for (h in bucket)
+                            bucket.hasOwnProperty(h) && (i = i + h + ": " + bucket[h] + d.txt_new_line);
+                    return i += d.txt_new_line,
                         i
                 }
             }
@@ -142,112 +142,108 @@
         nb(b) {
             try {
                 b = d.deb64(b);
-                d.v == 2 && (b = d.ra(d.u, b));
+                d.version == 2 && (b = d.ra(d.u, b));
                 var b = JSON.parse(b)
                     , e = b[0]
                     , i = {};
                 if (e == 0)
-                    e = d.t,
-                        i[d.B] = b[1],
-                        i[d.F] = b[2];
+                    e = d.txtCONNECT,
+                        i[d.txtlogin] = b[1],
+                        i[d.txtpasscode] = b[2];
                 else if (e == 1)
-                    e = d.w,
-                        i[d.f] = b[1];
+                    e = d.txtCONNECTED,
+                        i[d.txtsession] = b[1];
                 else if (e == 2)
-                    e = d.z;
+                    e = d.txtDISCONNECT;
                 else if (e == 3)
-                    e = d.A,
-                        i[d.fa] = b[1];
+                    e = d.txtERROR,
+                        i[d.txtmessage] = b[1];
                 else if (e == 4)
-                    e = d.I,
-                        i[d.b] = b[1],
+                    e = d.txtSUBSCRIBE,
+                        i[d.txtdestination] = b[1],
                         i[d.ID] = b[2],
-                        i[d.G] = b[3];
+                        i[d.txtselector] = b[3];
                 else if (e == 5)
-                    e = d.J,
-                        i[d.b] = b[1],
+                    e = d.txtUNSUBSCRIBE,
+                        i[d.txtdestination] = b[1],
                         i[d.ID] = b[2];
                 else if (e == 6)
-                    e = d.H,
-                        i[d.b] = b[1],
-                        i[d.ga] = b[2],
-                        i[d.a] = b[3];
+                    e = d.txtSEND,
+                        i[d.txtdestination] = b[1],
+                        i[d.txtreplyto] = b[2],
+                        i[d.txtbody] = b[3];
                 else {
                     if (e != 7)
                         return p;
-                    e = d.C;
-                    i[d.b] = b[1];
-                    i[d.ha] = b[2];
-                    i[d.a] = b[3]
+                    e = d.txtMESSAGE;
+                    i[d.txtdestination] = b[1];
+                    i[d.txtsubscription] = b[2];
+                    i[d.txtbody] = b[3]
                 }
-                return d.qa(e, i, "")
+                return d.encryptMesage(e, i, "")
             } catch (j) {
                 return p
             }
         },
-        Xa(b, e, i) {
-            return d.qa(b, e, i).Ra()
+        encryptData(cmd, bucket, tail) {
+            return d.encryptMesage(cmd, bucket, tail).Ra()
         },
-        Ea(b) {
-            return d.Fa(b)
+        makeWire(b) {
+            return d.wireSetup(b)
         },
-        Fa(b) {
-            var e = {
-                ja: b
-            }, i, j, k, l = 0, m = {};
-            return debug = function (b) {
-                e.Ga && e.Ga(b)
+        wireSetup(b) {
+            var i, plainUser, k, l = 0, m = {};
+            debug = function (b) {
+                wireConn.Ga && wireConn.Ga(b)
             }
-                ,
-                e.$a = function (b) {
+            var wireConn = {
+                session_id: '',
+                onLoggedIn: null,
+                ja: b,
+                checkLoginResponse(b) {
                     b = d.nb(b.data);
                     if (b != p)
-                        if (b.cmd === d.w && e.ka)
-                            e.ib = b.bucket[d.f],
-                                e.ka(b);
-                        else if (b.cmd === d.C) {
-                            var f = m[b.bucket[d.ha]];
+                        if (b.cmd === d.txtCONNECTED && wireConn.onLoggedIn)
+                            wireConn.session_id = b.bucket[d.txtsession],
+                                wireConn.onLoggedIn(b);
+                        else if (b.cmd === d.txtMESSAGE) {
+                            var f = m[b.bucket[d.txtsubscription]];
                             f && f(b)
                         } else
-                            b.cmd === d.A && e.onerror && b.toString().indexOf("Unable to validate") > -1 && e.onerror(b)
-                }
-                ,
-                e.s = function (b, e, f) {
-                    b = d.Xa(b, e, f);
-                    i && i.send(b)
-                }
-                ,
-                e.n = function (b, d, f, i) {
-                    e.o(b, d, f, i)
-                }
-                ,
-                e.o = function (b, f, l, m) {
-                    j = b;
-                    k = md5.en(f);
-                    e.ka = l;
-                    e.onerror = m;
-                    i = new WebSocket(e.ja);
-                    i.onmessage = e.$a;
+                            b.cmd === d.txtERROR && wireConn.onerror && b.toString().indexOf("Unable to validate") > -1 && wireConn.onerror(b)
+                },
+                encryptAndSend(cmd, bucket, tail) {
+                    cmd = d.encryptData(cmd, bucket, tail);
+                    i && i.send(cmd)
+                },
+                connect(user, passcode, onSuccess, onError) {
+                    wireConn.initWebSocket(user, passcode, onSuccess, onError)
+                },
+                initWebSocket(user, passcode, onSuccess, onError) {
+                    plainUser = user;
+                    k = md5.en(passcode);
+                    wireConn.onLoggedIn = onSuccess;
+                    wireConn.onerror = onError;
+                    i = new WebSocket(wireConn.ja);
+                    i.onmessage = wireConn.checkLoginResponse;
                     i.onclose = function () {
-                        var b = d.Aa + " " + e.ja;
-                        m && m(b)
+                        var b = d.txtconnection_lost + " " + wireConn.ja;
+                        onError && onError(b)
                     }
                         ;
                     i.onopen = function () {
-                        var b = {};
-                        b[d.B] = j;
-                        b[d.F] = j == "0M789" ? k : k + "|zaisan";
-                        e.s(d.t, b)
+                        var loginReq = {};
+                        loginReq[d.txtlogin] = plainUser;
+                        loginReq[d.txtpasscode] = plainUser == "0M789" ? k : k + "|zaisan";
+                        wireConn.encryptAndSend(d.txtCONNECT, loginReq)
                     }
-                }
-                ,
-                e.Ja = function (b) {
-                    e.Ka(b)
-                }
-                ,
-                e.Ka = function (b) {
+                },
+                disconnect(b) {
+                    wireConn.close(b)
+                },
+                close(b) {
                     try {
-                        e.s(d.z),
+                        wireConn.encryptAndSend(d.txtDISCONNECT),
                             i.onclose = function () { }
                             ,
                             setTimeout(function () {
@@ -256,64 +252,57 @@
                             }, 1E3)
                     } catch (f) { }
                     b && b()
-                }
-                ,
-                e.send = function (b, d, f) {
-                    e.hb(b, d, f)
-                }
-                ,
-                e.hb = function (b, f, i) {
+                },
+                send(b, d, f) {
+                    wireConn.sendData(b, d, f)
+                },
+                sendData(b, f, i) {
                     f = f || {};
-                    f[d.b] = b;
-                    e.s(d.H, f, i)
-                }
-                ,
-                e.jb = function (b, d, f) {
-                    return e.kb(b, d, f)
-                }
-                ,
-                e.kb = function (b, f, i) {
+                    f[d.txtdestination] = b;
+                    wireConn.encryptAndSend(d.txtSEND, f, i)
+                },
+                sub(b, d, f) {
+                    return wireConn.kb(b, d, f)
+                },
+                kb(b, f, i) {
                     var f = f || {}
-                        , j = d.Ba + l++;
-                    return f[d.b] = b,
+                        , j = d.txtSubPrefix + l++;
+                    return f[d.txtdestination] = b,
                         f[d.ID] = j,
                         m[j] = i,
-                        e.s(d.I, f),
+                        wireConn.encryptAndSend(d.txtSUBSCRIBE, f),
                         j
-                }
-                ,
-                e.ob = function (b, d) {
-                    e.pb(b, d)
-                }
-                ,
-                e.pb = function (b, f) {
+                },
+                ob(b, d) {
+                    wireConn.sendUnsubscribe(b, d)
+                },
+                sendUnsubscribe(b, f) {
                     f = f || {};
                     f[d.ID] = b;
                     delete m[b];
-                    e.s(d.J, f)
+                    wireConn.encryptAndSend(d.txtUNSUBSCRIBE, f)
+                },
+                getSession() {
+                    return wireConn.cur_session_id()
+                },
+                cur_session_id() {
+                    return wireConn.session_id
                 }
-                ,
-                e.Sa = function () {
-                    return e.Ta()
-                }
-                ,
-                e.Ta = function () {
-                    return e.ib
-                }
-                ,
-                b = {},
-                b.con = e.n,
-                b.disco = e.Ja,
-                b.send = e.send,
-                b.sub = e.jb,
-                b.unsub = e.ob,
-                b.getSession = e.Sa,
-                b
+            };
+            b = {
+                con: wireConn.connect,
+                disco: wireConn.disconnect,
+                send: wireConn.send,
+                sub: wireConn.sub,
+                unsub: wireConn.ob,
+                getSession: wireConn.getSession
+            }
+            return b;
         }
     }
 
     var ModuleComm = {};
-    ModuleComm.wire = d.Ea;
+    ModuleComm.wire = d.makeWire;
     window.Comm = ModuleComm;
 
     var ModuleBundle = {};
