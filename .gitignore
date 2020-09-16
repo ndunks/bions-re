@@ -1,0 +1,4 @@
+/node_modules
+/bions.cfg
+/.*
+!/.git*

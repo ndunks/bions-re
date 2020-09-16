@@ -89,7 +89,7 @@
     }
         ;
     d.La = function (b, e, f) {
-        d.p.chgpwd(b, md5.en(e), md5.en(f))
+        d.p.chgpwd(b, cryptoMD5.en(e), cryptoMD5.en(f))
     }
         ;
     d.Pa = function (b, e) {
@@ -101,7 +101,7 @@
     }
         ;
     d.Oa = function (b, e, f) {
-        d.r.chgpwd(b, md5.en(e), md5.en(f))
+        d.r.chgpwd(b, cryptoMD5.en(e), cryptoMD5.en(f))
     }
         ;
     d.ea = function (b) {
