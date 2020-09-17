@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BIONS - v.3.4</title>
+        <link rel="shortcut icon" href="assets/favicon.ico"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="apple-mobile-web-app-capable" content="no"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <link rel="apple-touch-icon" href="images/app-icon.png"/>
+        <style type="text/css">
+            #load {
+                position: absolute;
+                top: 50%;
+                margin-top: -.5em;
+                text-align: center;
+                width: 95%;
+                height: 1em;
+                -webkit-animation-name: load;
+                -webkit-animation-duration: 0.5s;
+                -webkit-animation-iteration-count: infinite;
+                -webkit-animation-direction: linear;
+            }
+
+            #info {
+                position: absolute;
+                top: 55%;
+                margin-top: -.5em;
+                text-align: center;
+                width: 95%;
+                height: 1em;
+                display: inline-block;
+            }
+
+            #load > * {
+                background-color: gray;
+                display: inline-block;
+                height: 1em;
+                -webkit-border-radius: .5em;
+                margin: 0 .5em;
+                width: 1em;
+                opacity: 0.8;
+            }
+
+            @-webkit-keyframes load {
+                0% {
+                    opacity: 0.8
+                }
+
+                50% {
+                    opacity: 0
+                }
+
+                100% {
+                    opacity: 0.8
+                }
+            }
+
+            @-moz-keyframes flash load {
+                0% {
+                    opacity: 0.8
+                }
+
+                50% {
+                    opacity: 0
+                }
+
+                100% {
+                    opacity: 0.8
+                }
+            }
+
+            @-ms-keyframes flash load {
+                0% {
+                    opacity: 0.8
+                }
+
+                50% {
+                    opacity: 0
+                }
+
+                100% {
+                    opacity: 0.8
+                }
+            }
+        </style>
+        <link type="text/css" rel="stylesheet" href="/zaisan.css"/>
+        <script src="/zaisan.js"></script>
+        <script src="/modules/bundle.js"></script>
+        <script src="/modules/feed.js"></script>
+        <script src="/modules/trading.js"></script>
+        <script src="/modules/bridge.js"></script>
+        
+    </head>
+    <body class="enyo-unselectable onyx">
+        <div id="load">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div id="info"></div>
+    </body>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41099007-2']);
+        _gaq.push(['_setDomainName', 'zaisanbnis.com']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        }
+        )();
+    </script>
+</html>
